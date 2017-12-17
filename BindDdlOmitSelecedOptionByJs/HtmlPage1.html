@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <script src="Scripts/jquery-3.2.1.min.js"></script>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <div id="output"></div>
+    <select id="ddl"></select>
+
+
+    <script>
+        $(function () {
+
+            var $select = $("#ddl");
+          
+            var newList = loadDdl();
+            newList.getFilteredList();
+            var all = newList.getFilteredList();
+
+            var $defOption = $("<option/>", { value: "-1", text: "Select Name" });
+            $select.empty().append($defOption);
+            $.each(all, function (i, v) {
+
+                $("<option/>", { value: v.Id, text: v.Name }).appendTo($select);
+               
+            });
+
+            $("#ddl").change(function () {
+                debugger;
+                var input = $("#ddl :selected").text();
+                var lbl = $("<label/>");
+                lbl.html(input);
+                $("#output").append(lbl);
+                $("#output").append($('<br/>'));
+                fillDdl(input);
+            });
+
+            function fillDdl(input) {
+                
+                var $defOption = $("<option/>", { value: "-1", text: "Select Name" });
+                $select.empty().append($defOption);
+
+                newList.selected(input);
+                var filtered = newList.getFilteredList();
+                $.each(filtered, function (i, v) {
+
+                    $("<option/>", { value: v.Id, text: v.Name }).appendTo($select);
+                   
+                });
+
+            }
+
+
+        });
+
+
+        function loadDdl() {
+
+            var list = [{ Id: 1, Name: "Rakesh" }, { Id: 2, Name: "Ritesh" }, { Id: 3, Name: "Rupesh" }];
+
+            function selected(a) {
+
+                list = list.filter(function (n) { return n.Name !== a });
+
+            }
+
+            function getFilteredList() {
+                return list;
+            }
+
+            return {
+                selected: selected,
+                getFilteredList: getFilteredList,
+            };
+
+        }
+    </script>
+</body>
+</html>
